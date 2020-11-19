@@ -358,3 +358,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore common CMake build folder names
+build/**
+out/**
