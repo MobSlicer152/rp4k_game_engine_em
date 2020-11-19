@@ -13,5 +13,5 @@ set(BUILD_DYNAMIC_LIBS OFF)
 add_subdirectory(deps)
 
 add_executable(rp4k_gameengine ${SOURCES} ${HEADERS})
-target_link_libraries(rp4k_gameengine box2d luacppinterface rapidjson sfml)
+target_link_libraries(rp4k_gameengine box2d rapidjson sfml)
 
