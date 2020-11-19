@@ -1,0 +1,12 @@
+[submodule "deps/sfml"]
+	path = deps/sfml
+	url = https://github.com/SFML/SFML
+[submodule "deps/box2d"]
+	path = deps/box2d
+	url = https://github.com/erincatto/box2d
+[submodule "deps/luacppinterface"]
+	path = deps/luacppinterface
+	url = https://github.com/davidsiaw/luacppinterface
+[submodule "deps/rapidjson"]
+	path = deps/rapidjson
+	url = https://github.com/Tencent/rapidjson/
