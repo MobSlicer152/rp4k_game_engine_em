@@ -6,12 +6,11 @@ include_directories(include deps/box2d/include deps/rapidjson/include deps/sfml/
 
 set(SOURCES
 	src/main.cc
-
-	#src/engine.cc
+	src/engine.cc
 )
 
 set(HEADERS
-	#include/engine.h
+	include/engine.h
 )
 
 set(BUILD_DYNAMIC_LIBS OFF)

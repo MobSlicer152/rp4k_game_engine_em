@@ -18,9 +18,11 @@ public:
 	 * Because we prevent multiple instances by killing off the copy/move
 	 * constructors and the assignment operator, we have this to give us an instance
 	 */
-	static engine &create_inst(void);
+	static engine &get_inst(void);
 
 	void start(sf::RenderWindow *win);
+
+	void update();
 
 private:
 	bool running;
@@ -28,7 +30,7 @@ private:
 	engine(void);
 
 	/* To prevent duplicate instances, these are just stubs */
-	engine(engine &copu);
+	engine(engine &copy);
 	engine(engine &&other);
 	engine &operator= (engine &copy);
 
