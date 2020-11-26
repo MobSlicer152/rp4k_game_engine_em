@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ecs.h"
 #ifndef ENGINE_H
 #define ENGINE_H 1
 
@@ -12,7 +13,11 @@
 class engine
 {
 public:
+	/* The window object from SFML */
 	sf::RenderWindow *win;
+
+	/* Objects for the entity component system */
+	ECS::World *world;
 
 	/*
 	 * Because we prevent multiple instances by killing off the copy/move
@@ -20,9 +25,14 @@ public:
 	 */
 	static engine &get_inst(void);
 
+	/* Start the engine */
 	void start(sf::RenderWindow *win);
 
-	void update();
+	/* Update */
+	void update(void);
+
+	/* ECS-related functions */
+	void add_system(ECS::EntitySystem *system);
 
 private:
 	bool running;

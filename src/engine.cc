@@ -15,7 +15,13 @@ void engine::start(sf::RenderWindow *win)
 		this->update();
 }
 
-void engine::update()
+void engine::add_system(ECS::EntitySystem *system)
+{
+	this->world->registerSystem(system);
+	this->world->enableSystem(system);
+}
+
+void engine::update(void)
 {
 	sf::Event event;
 
@@ -29,6 +35,8 @@ void engine::update()
 		if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
 			win->close();
 	}
+
+	this->world->tick(10.0f);
 }
 
 engine::engine(void) {}
