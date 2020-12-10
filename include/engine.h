@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ecs.h"
 #ifndef ENGINE_H
 #define ENGINE_H 1
 
@@ -9,6 +8,11 @@
 #include <stdlib.h>
 
 #include <SFML/Graphics.hpp>
+
+#include "ecs.h"
+
+#include "systems/animation.h"
+#include "systems/render.h"
 
 class engine
 {

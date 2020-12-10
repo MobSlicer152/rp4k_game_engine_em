@@ -1,7 +1,9 @@
 #pragma once
 
-#ifndef SYSTEM_RENDER_H
-#define SYSTEM_RENDER_H 1
+#ifndef SYSTEMS_RENDER_H
+#define SYSTEMS_RENDER_H 1
+
+#include <stdio.h>
 
 #include "ecs.h"
 
@@ -14,6 +16,11 @@ public:
 	~render_system(void);
 
 	void tick(ECS::World *world, float delta) override;
+
+private:
+	std::unordered_map<std::string, sf::Texture *> texture_map;
+
+	sf::Texture *load_texture(std::string texture_file);
 };
 
 #endif

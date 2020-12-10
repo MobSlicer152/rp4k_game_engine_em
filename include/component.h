@@ -12,42 +12,70 @@
 
 #include "ecs.h"
 
-struct transform {
+struct animator {
 	ECS_DECLARE_TYPE;
 
-	float x;
-	float y;
-	float rot;
+	int sprite_width;
+	int sprite_height;
+	
+	int total_columns;
+	int total_rows;
 
-	transform(float x, float y, float rot)
+	int current_column;
+	int current_row;
+
+	float current_time;
+	float next_frame_time;
+
+	bool facing_right;
+
+	animator(int width, int height, float frame_delay, int new_columns, int new_rows)
 	{
-		this->x = x;
-		this->y = y;
-		this->rot = rot;
+		this->sprite_width = width;
+		this->sprite_height = height;
+
+		this->current_column = 0;
+		this->current_row = 0;
+
+		this->total_columns = new_columns;
+		this->total_rows = new_rows;
+
+		this->next_frame_time = frame_delay;
+
+		this->current_time = 0;
+
+		this->facing_right = true;
 	}
 };
-ECS_DEFINE_TYPE(transform);
 
 struct sprite_2d {
 	ECS_DECLARE_TYPE;
 
 	sf::Sprite self;
-	char *texture_path;
+	std::string texture_path;
 	int width;
 	int height;
 
-	sprite_2d(char *texture_path)
+	sprite_2d(std::string texture_path)
 	{
-		if (!texture_path) {
-			errno = EINVAL;
-			return;
-		}
-
-		this->texture_path = (char *)calloc(strlen(texture_path), sizeof(char));
-		sprintf(this->texture_path, "%s", texture_path);
+		this->texture_path = texture_path;
 	}
 };
 ECS_DEFINE_TYPE(sprite);
+
+struct transform {
+	ECS_DECLARE_TYPE;
+
+	float x;
+	float y;
+
+	transform(float x, float y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+};
+ECS_DEFINE_TYPE(transform);
 
 
 #endif
