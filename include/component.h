@@ -77,6 +77,10 @@ struct transform {
 };
 ECS_DEFINE_TYPE(transform);
 
+struct input_controller {
+	ECS_DECLARE_TYPE;
+};
+ECS_DEFINE_TYPE(input_controller);
 
 #endif
 

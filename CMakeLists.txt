@@ -1,18 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(rp4k_gameengine)
+project(rp4k_game_engine)
 
 include_directories(include deps/box2d/include deps/rapidjson/include deps/sfml/include)
 
-set(SOURCES
-	src/main.cc
+set(ENGINE_SOURCES
 	src/engine.cc
 
 	src/systems/animation.cc
 	src/systems/render.cc
 )
 
-set(HEADERS
+set(ENGINE_HEADERS
 	include/component.h
 	include/engine.h
 
@@ -24,13 +23,15 @@ set(BUILD_DYNAMIC_LIBS OFF)
 
 add_subdirectory(deps)
 
-add_executable(rp4k_gameengine ${SOURCES} ${HEADERS})
+add_library(rp4k_game_engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS})
+add_executable(rp4k_game src/main.cc)
 
 add_custom_command(
-	TARGET rp4k_gameengine POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E rm -rf $<TARGET_FILE_DIR:rp4k_gameengine>/res
-	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:rp4k_gameengine>/res
+	TARGET rp4k_game_engine POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E rm -rf $<TARGET_FILE_DIR:rp4k_game_engine>/res
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:rp4k_game_engine>/res
 )
 
-target_link_libraries(rp4k_gameengine box2d sfml-graphics sfml-system sfml-window)
+target_link_libraries(rp4k_game_engine box2d sfml-graphics sfml-system sfml-window)
+target_link_libraries(rp4k_game rp4k_game_engine)
 

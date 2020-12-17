@@ -13,7 +13,7 @@ void animation_system::tick(ECS::World *world, float delta_time)
 
 			if (anim->current_time >= anim->next_frame_time) {
 				anim->current_time = 0;
-				anim->current_column = (anim->current_column) % anim->total_columns;
+				anim->current_column = (anim->current_column + 1) % anim->total_columns;
 			}
 
 			sprite->self.setTextureRect(sf::IntRect(anim->current_column *
