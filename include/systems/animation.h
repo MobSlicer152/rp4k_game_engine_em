@@ -8,7 +8,7 @@
 #include "component.h"
 
 class animation_system : public ECS::EntitySystem {
-public:
+    public:
 	animation_system(void);
 	~animation_system(void);
 

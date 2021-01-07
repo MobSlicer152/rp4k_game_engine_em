@@ -14,9 +14,8 @@
 #include "systems/animation.h"
 #include "systems/render.h"
 
-class engine
-{
-public:
+class engine {
+    public:
 	/* The window object from SFML */
 	sf::RenderWindow *win;
 
@@ -38,7 +37,7 @@ public:
 	/* ECS-related functions */
 	void add_system(ECS::EntitySystem *system);
 
-private:
+    private:
 	bool running;
 
 	engine(void);
@@ -46,7 +45,7 @@ private:
 	/* To prevent duplicate instances, these are just stubs */
 	engine(engine &copy);
 	engine(engine &&other);
-	engine &operator= (engine &copy);
+	engine &operator=(engine &copy);
 
 	~engine(void);
 };

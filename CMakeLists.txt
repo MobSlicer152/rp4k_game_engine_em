@@ -27,11 +27,10 @@ add_library(rp4k_game_engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS})
 add_executable(rp4k_game src/main.cc)
 
 add_custom_command(
-	TARGET rp4k_game_engine POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E rm -rf $<TARGET_FILE_DIR:rp4k_game_engine>/res
-	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:rp4k_game_engine>/res
+	TARGET rp4k_game POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E remove -f $<TARGET_FILE_DIR:rp4k_game>/res
+	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:rp4k_game>
 )
 
 target_link_libraries(rp4k_game_engine box2d sfml-graphics sfml-system sfml-window)
 target_link_libraries(rp4k_game rp4k_game_engine)
-

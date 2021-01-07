@@ -31,15 +31,19 @@ void engine::update(void)
 	while (this->win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			win->close();
-			
-		if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
+
+		if ((event.type == sf::Event::KeyPressed) &&
+		    (event.key.code == sf::Keyboard::Escape))
 			win->close();
 	}
 
 	this->world->tick(10.0f);
 }
 
-engine::engine(void) {}
+engine::engine(void)
+{
+}
 
-engine::~engine(void) {}
-
+engine::~engine(void)
+{
+}

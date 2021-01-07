@@ -17,7 +17,7 @@ struct animator {
 
 	int sprite_width;
 	int sprite_height;
-	
+
 	int total_columns;
 	int total_rows;
 
@@ -29,7 +29,8 @@ struct animator {
 
 	bool facing_right;
 
-	animator(int width, int height, float frame_delay, int new_columns, int new_rows)
+	animator(int width, int height, float frame_delay, int new_columns,
+		 int new_rows)
 	{
 		this->sprite_width = width;
 		this->sprite_height = height;
@@ -68,19 +69,49 @@ struct transform {
 
 	float x;
 	float y;
+	
+	float x_speed;
+	float y_speed;
 
 	transform(float x, float y)
 	{
 		this->x = x;
 		this->y = y;
 	}
+
+	void update_speed(float x_speed, float y_speed)
+	{
+		this->x_speed = x_speed;
+		this->y_speed = y_speed;
+	}
+
+	void move(void)
+	{
+		this->x += this->x_speed;
+		this->y += this->y_speed;
+	}
 };
 ECS_DEFINE_TYPE(transform);
 
 struct input_controller {
 	ECS_DECLARE_TYPE;
+
+	char input_active:1;
+	char w:1;
+	char a:1;
+	char s:1;
+	char d:1;
+
+	input_controller(void)
+	{
+		this->input_active = true;
+
+		this->w = false;
+		this->a = false;
+		this->s = false;
+		this->d = false;
+	}
 };
 ECS_DEFINE_TYPE(input_controller);
 
 #endif
-
