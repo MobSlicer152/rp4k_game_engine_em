@@ -8,6 +8,8 @@ set(ENGINE_SOURCES
 	src/engine.cc
 
 	src/systems/animation.cc
+	src/systems/input.cc
+	src/systems/movement.cc
 	src/systems/render.cc
 )
 
@@ -16,6 +18,8 @@ set(ENGINE_HEADERS
 	include/engine.h
 
 	include/systems/animation.h
+	include/systems/input.h
+	include/systems/movement.h
 	include/systems/render.h
 )
 
