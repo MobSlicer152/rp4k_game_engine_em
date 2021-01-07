@@ -17,6 +17,6 @@ class input_system : public ECS::EntitySystem {
 
     private:
 	sf::RenderWindow *win;
-}
+};
 
 #endif

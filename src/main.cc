@@ -2,12 +2,12 @@
 
 int main(int argc, char *argv[])
 {
+	/* Get the engine instance */
+	engine &inst = engine::get_inst();
+
 	/* Create a window */
 	sf::RenderWindow *win = new sf::RenderWindow(sf::VideoMode(1024, 600),
 						     "RP4K Game Engine");
-
-	/* Get the engine instance */
-	engine &inst = engine::get_inst();
 
 	/* Create our world for entities */
 	inst.world = ECS::World::createWorld();
@@ -16,9 +16,11 @@ int main(int argc, char *argv[])
 	ECS::Entity *background;
 	ECS::Entity *test;
 
-	/* Add a system to the engine */
-	inst.add_system(new render_system());
+	/* Add systems to the engine */
 	inst.add_system(new animation_system());
+	inst.add_system(new input_system(win));
+	inst.add_system(new movement_system());
+	inst.add_system(new render_system());
 
 	/* Set up the entities */
 	background = inst.world->create();
@@ -27,11 +29,11 @@ int main(int argc, char *argv[])
 	background->assign<struct transform>(0, 0);
 	background->assign<struct sprite_2d>("res/textures/background.png");
 
-	test->assign<struct transform>(10, 10);
+	test->assign<struct transform>(100, 10);
 	test->assign<struct sprite_2d>("res/textures/test_sheet.png");
-	test->assign<struct animator>(32, 32, 2000.0f, 4, 1);
+	test->assign<struct animator>(32, 32, 200.0f, 4, 1);
 	test->get<struct animator>()->current_row = 0; /* idle animation */
-	test->assign<input_controller>();
+	test->assign<struct input_controller>();
 
 	/* Print our entity IDs */
 	printf("Entity ID of entity \'background\' is %zu\n",

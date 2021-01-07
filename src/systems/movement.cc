@@ -27,14 +27,14 @@ void movement_system::tick(ECS::World *world, float delta)
 				}
 
 				if (input->a) {
-					anim->facing_right = true;
-					anim->current_row = 1;
+					anim->facing_right = false;
+					anim->current_row = 0;
 
 					trans->x_speed = -X_SPEED;
 					trans->move();
 				} else if (input->d) {
 					anim->facing_right = true;
-					anim->current_row = 1;
+					anim->current_row = 0;
 
 					trans->x_speed = X_SPEED;
 					trans->move();

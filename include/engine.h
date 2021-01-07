@@ -12,6 +12,8 @@
 #include "ecs.h"
 
 #include "systems/animation.h"
+#include "systems/input.h"
+#include "systems/movement.h"
 #include "systems/render.h"
 
 class engine {

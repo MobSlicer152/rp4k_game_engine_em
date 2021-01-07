@@ -16,6 +16,6 @@ class movement_system : public ECS::EntitySystem {
 	~movement_system(void);
 
 	void tick(ECS::World *world, float delta) override;
-}
+};
 
 #endif

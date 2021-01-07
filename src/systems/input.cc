@@ -5,7 +5,7 @@ input_system::input_system(sf::RenderWindow *win)
 	this->win = win;
 }
 
-input_system::~input_system()
+input_system::~input_system(void)
 {
 }
 

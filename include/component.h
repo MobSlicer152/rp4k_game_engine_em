@@ -27,7 +27,7 @@ struct animator {
 	float current_time;
 	float next_frame_time;
 
-	bool facing_right;
+	char facing_right:1;
 
 	animator(int width, int height, float frame_delay, int new_columns,
 		 int new_rows)
