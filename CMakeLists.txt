@@ -10,6 +10,7 @@ set(ENGINE_SOURCES
 	src/systems/animation.cc
 	src/systems/input.cc
 	src/systems/movement.cc
+	src/systems/physics.cc
 	src/systems/render.cc
 )
 
@@ -20,6 +21,7 @@ set(ENGINE_HEADERS
 	include/systems/animation.h
 	include/systems/input.h
 	include/systems/movement.h
+	include/systems/physics.h
 	include/systems/render.h
 )
 

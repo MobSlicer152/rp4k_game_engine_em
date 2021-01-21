@@ -114,4 +114,29 @@ struct input_controller {
 };
 ECS_DEFINE_TYPE(input_controller);
 
+struct box_collider {
+public:
+	ECS_DECLARE_TYPE;
+
+	int left_edge;
+	int right_edge;
+	int top_edge;
+	int bottom_edge;
+
+	box_collider(void)
+	{
+		memset(this, '\0', sizeof(box_collider));
+	}
+
+	void update(int x_side, int y_side, int width, int height)
+	{
+		left_edge = x_side;
+		right_edge = x_side + width;
+
+		top_edge = y_side;
+		bottom_edge = y_side + height;
+	}
+};
+ECS_DEFINE_TYPE(box_collider);
+
 #endif
