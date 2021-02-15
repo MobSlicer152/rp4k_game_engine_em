@@ -2,6 +2,14 @@
 	"files.associations": {
 		"string_view": "cpp",
 		"*.tcc": "cpp",
-		"numeric": "cpp"
-	}
+		"numeric": "cpp",
+		"deque": "cpp",
+		"string": "cpp",
+		"unordered_map": "cpp",
+		"vector": "cpp"
+	},
+	"editor.insertSpaces": false,
+	"editor.autoIndent": "full",
+	"editor.tabSize": 8,
+	"editor.detectIndentation": false
 }
