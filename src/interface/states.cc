@@ -4,10 +4,10 @@ bool states::paused = false;
 
 bool states::get_paused(void)
 {
-	return this->paused;
+	return paused;
 }
 
 void states::set_paused(bool paused)
 {
-	this->paused = true;
+	paused = true;
 }

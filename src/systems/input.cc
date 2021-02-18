@@ -16,13 +16,19 @@ void input_system::tick(ECS::World *world, float delta)
 
 void input_system::get_key_events(ECS::World *world)
 {
-	world->each<struct input_controller>(
-		[&](ECS::Entity *entity,
-		    ECS::ComponentHandle<struct input_controller> input)
-			-> void {
-			input->w = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-			input->a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-			input->s = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
-			input->d = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-		});
+	if (!states::get_paused()) {
+		world->each<struct input_controller>(
+			[&](ECS::Entity *entity,
+			    ECS::ComponentHandle<struct input_controller> input)
+				-> void {
+				input->w = sf::Keyboard::isKeyPressed(
+					sf::Keyboard::W);
+				input->a = sf::Keyboard::isKeyPressed(
+					sf::Keyboard::A);
+				input->s = sf::Keyboard::isKeyPressed(
+					sf::Keyboard::S);
+				input->d = sf::Keyboard::isKeyPressed(
+					sf::Keyboard::D);
+			});
+	}
 }

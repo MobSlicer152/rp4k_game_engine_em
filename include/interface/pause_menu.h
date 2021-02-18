@@ -8,15 +8,6 @@
 #include "button_map.h"
 #include "states.h"
 
-enum pause
-
-extern const static char pause_menu_buttons[] = {
-	"RESUME",
-	"SAVE",
-	"LOAD",
-	"QUIT"
-};
-
 class pause_menu {
 public:
 	pause_menu(void);
@@ -27,7 +18,7 @@ public:
 	void render(sf::RenderWindow *wnd, float delta, sf::Vector2f resume_pos);
 
 private:
-	void init_buttons(void);
+	void init_buttons(sf::RenderWindow *wnd);
 	void quit(sf::RenderWindow *wnd);
 };
 

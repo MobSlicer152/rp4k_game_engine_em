@@ -30,14 +30,15 @@ void engine::update(void)
 
 	while (this->win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
-			win->close();
-
-		if ((event.type == sf::Event::KeyPressed) &&
-		    (event.key.code == sf::Keyboard::Escape))
-			win->close();
+			this->win->close();
 	}
 
 	this->world->tick(10.0f);
+
+	this->main_cam.update(world, 10.0f, this->win);
+
+	if (states::get_paused())
+		paused_actions();
 }
 
 engine::engine(void)
@@ -46,4 +47,9 @@ engine::engine(void)
 
 engine::~engine(void)
 {
+}
+
+void engine::paused_actions(void)
+{
+	this->pause.render(this->win, 10.0f, main_cam.view.getCenter());
 }

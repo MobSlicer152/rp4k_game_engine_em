@@ -1,6 +1,8 @@
-#include "interface/buttom_map.h"
+#include "interface/button_map.h"
 
-static std::map<std::string, button *> &button_map::get_map(void)
+std::map<std::string, button *> button_map::buttons;
+
+std::map<std::string, button *> &button_map::get_map(void)
 {
-	return this->buttons;
+	return buttons;
 }

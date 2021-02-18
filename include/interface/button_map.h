@@ -7,7 +7,7 @@
 
 #include "button.h"
 
-static class button_map {
+class button_map {
 public:
 	static std::map<std::string, button *> &get_map(void);
 

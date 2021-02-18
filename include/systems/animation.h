@@ -6,6 +6,7 @@
 #include "ecs.h"
 
 #include "component.h"
+#include "interface/states.h"
 
 class animation_system : public ECS::EntitySystem {
     public:

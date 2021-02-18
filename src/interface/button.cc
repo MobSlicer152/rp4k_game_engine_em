@@ -15,9 +15,9 @@ button::button(sf::Vector2f size, sf::Color colour, std::string text)
 	this->clicked = false;
 	this->highlighted = false;
 
-	this->default_colour = sf::Color(color);
-	this->highlight_colour = sf::Color(color.r + 50, color.g + 50,
-					   color.b + 50, color.a + 50);
+	this->default_colour = sf::Color(colour);
+	this->highlight_colour = sf::Color(colour.r + 50, colour.g + 50,
+					   colour.b + 50, colour.a + 50);
 
 	this->background.setSize(size);
 	this->background.setFillColor(this->default_colour);
@@ -31,7 +31,7 @@ button::button(sf::Vector2f size, sf::Color colour, std::string text)
 	this->text.setString(text);
 }
 
-bool button::highlight(sf::RenderWindow *wnd)
+void button::highlight(sf::RenderWindow *wnd)
 {
 	if (this->background.getGlobalBounds().contains(
 		    wnd->mapPixelToCoords(sf::Mouse::getPosition(*wnd)))) {

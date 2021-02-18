@@ -8,10 +8,12 @@ set_property(GLOBAL PROPERTY CXX_STANDARD 11)
 set(ENGINE_SOURCES
 	src/engine.cc
 
-	src/interface/button.cc
 	src/interface/button_map.cc
+	src/interface/button.cc
+	src/interface/main_camera.cc
 	src/interface/pause_menu.cc
 	src/interface/states.cc
+	src/interface/tile.cc
 
 	src/systems/animation.cc
 	src/systems/input.cc
@@ -24,10 +26,12 @@ set(ENGINE_HEADERS
 	include/component.h
 	include/engine.h
 
-	include/interface/button.h
 	include/interface/button_map.h
+	include/interface/button.h
+	include/interface/main_camera.h
 	include/interface/pause_menu.h
 	include/interface/states.h
+	include/interface/tile.h
 
 	include/systems/animation.h
 	include/systems/input.h

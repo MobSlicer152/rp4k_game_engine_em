@@ -136,7 +136,7 @@ void physics_system::push_entity(ECS::Entity *touching_ent,
 	    (touched_trans->x - touching_trans->x_speed)) {
 		touched_trans->x++;
 	} else if ((touching_trans->x - touched_trans->x_speed) >
-	    (touched_trans->x - touching_trans->x_speed)) {
+		   (touched_trans->x - touching_trans->x_speed)) {
 		touched_trans->x--;
 	}
 
@@ -144,11 +144,59 @@ void physics_system::push_entity(ECS::Entity *touching_ent,
 	    (touched_trans->y - touching_trans->y_speed)) {
 		touched_trans->y++;
 	} else if ((touching_trans->y - touched_trans->y_speed) >
-	    (touched_trans->y - touching_trans->y_speed)) {
+		   (touched_trans->y - touching_trans->y_speed)) {
 		touched_trans->y--;
 	}
 }
 
 void physics_system::tick(ECS::World *world, float delta_time)
 {
+	if (!states::get_paused()) {
+		world->each<struct box_collider, struct sprite_2d,
+			    struct transform>(
+			[&](ECS::Entity *entity,
+			    ECS::ComponentHandle<struct box_collider> box,
+			    ECS::ComponentHandle<struct sprite_2d> sprite,
+			    ECS::ComponentHandle<struct transform> trans)
+				-> void {
+				box->update(
+					trans->x, trans->y,
+					sprite->self.getTextureRect().width,
+					sprite->self.getTextureRect().height);
+			});
+
+		world->each<
+			struct box_collider, struct transform,
+			struct tag>([&](ECS::Entity *touching_entity,
+					ECS::ComponentHandle<struct box_collider>
+						touching_box,
+					ECS::ComponentHandle<struct transform>
+						trans1,
+					ECS::ComponentHandle<struct tag> tag1)
+					    -> void {
+			world->each<struct box_collider, struct transform,
+				    struct tag>(
+				[&](ECS::Entity *touched_entity,
+				    ECS::ComponentHandle<struct box_collider>
+					    touched_box,
+				    ECS::ComponentHandle<struct transform>
+					    trans2,
+				    ECS::ComponentHandle<struct tag> tag1)
+					-> void {
+					if (touching_entity->getEntityId() !=
+					    touched_entity->getEntityId()) {
+						if (is_colliding(touching_box,
+								 touched_box))
+							push_entity(
+								touching_entity,
+								touched_entity);
+					}
+				});
+		});
+
+		world->each<struct transform>(
+			[&](ECS::Entity *entity,
+			    ECS::ComponentHandle<struct transform> trans)
+				-> void { trans->move(); });
+	}
 }

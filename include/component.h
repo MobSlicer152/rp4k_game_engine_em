@@ -12,6 +12,8 @@
 
 #include "ecs.h"
 
+#include "interface/tile.h"
+
 struct animator {
 	ECS_DECLARE_TYPE;
 
@@ -27,7 +29,7 @@ struct animator {
 	float current_time;
 	float next_frame_time;
 
-	char facing_right:1;
+	char facing_right : 1;
 
 	animator(int width, int height, float frame_delay, int new_columns,
 		 int new_rows)
@@ -69,7 +71,7 @@ struct transform {
 
 	float x;
 	float y;
-	
+
 	float x_speed;
 	float y_speed;
 
@@ -96,11 +98,11 @@ ECS_DEFINE_TYPE(transform);
 struct input_controller {
 	ECS_DECLARE_TYPE;
 
-	char input_active:1;
-	char w:1;
-	char a:1;
-	char s:1;
-	char d:1;
+	char input_active : 1;
+	char w : 1;
+	char a : 1;
+	char s : 1;
+	char d : 1;
 
 	input_controller(void)
 	{
@@ -115,7 +117,7 @@ struct input_controller {
 ECS_DEFINE_TYPE(input_controller);
 
 struct box_collider {
-public:
+    public:
 	ECS_DECLARE_TYPE;
 
 	int left_edge;
@@ -138,5 +140,78 @@ public:
 	}
 };
 ECS_DEFINE_TYPE(box_collider);
+
+struct tag {
+    public:
+	ECS_DECLARE_TYPE;
+
+	std::vector<std::string> names;
+
+	tag()
+	{
+	}
+
+	void add(std::string tag)
+	{
+		names.push_back(tag);
+	}
+};
+ECS_DEFINE_TYPE(tag);
+
+struct tilemap {
+    public:
+	ECS_DECLARE_TYPE;
+
+	float grid_size;
+	uint32_t grid_size_u;
+	uint32_t layers;
+
+	sf::Vector2u max_size;
+	sf::RectangleShape collision_box;
+
+	/*
+	 * Map structure
+	 * 
+	 * 1. Column of vectors
+	 * 2. Row of vectors
+	 * 3. Collection of tiles
+	 */
+	std::vector<std::vector<std::vector<tile *>>> map;
+
+	tilemap(void)
+	{
+		size_t x;
+		size_t y;
+		size_t z;
+
+		this->grid_size = 50.0f;
+
+		/* Return a value of new type, convert float to unsigned integer */
+		this->grid_size_u = static_cast<uint32_t>(this->grid_size);
+
+		/* Number of tiles (size of tiles determined by grid size) */
+		this->max_size.x = 20;
+		this->max_size.y = 20;
+		this->layers = 1;
+		this->map.resize(this->max_size.x);
+
+		for (x = 0; x < this->max_size.x; x++) {
+			this->map.push_back(std::vector<std::vector<tile *>>());
+
+			for (y = 0; y < this->max_size.y; y++) {
+				this->map[x].resize(this->max_size.y);
+				this->map[x].push_back(std::vector<tile *>());
+
+				for (z = 0; z < this->layers; z++) {
+					this->map[x][y].resize(this->layers);
+					this->map[x][y].push_back(NULL);
+				}
+			}
+		}
+
+		
+	}
+};
+ECS_DEFINE_TYPE(tilemap);
 
 #endif

@@ -11,6 +11,13 @@
 
 #include "ecs.h"
 
+#include "interface/button_map.h"
+#include "interface/button.h"
+#include "interface/main_camera.h"
+#include "interface/pause_menu.h"
+#include "interface/states.h"
+#include "interface/tile.h"
+
 #include "systems/animation.h"
 #include "systems/input.h"
 #include "systems/movement.h"
@@ -24,6 +31,9 @@ class engine {
 	/* Objects for the entity component system */
 	ECS::World *world;
 
+	main_camera main_cam;
+	pause_menu pause;
+
 	/*
 	 * Because we prevent multiple instances by killing off the copy/move
 	 * constructors and the assignment operator, we have this to give us an instance
@@ -32,9 +42,6 @@ class engine {
 
 	/* Start the engine */
 	void start(sf::RenderWindow *win);
-
-	/* Update */
-	void update(void);
 
 	/* ECS-related functions */
 	void add_system(ECS::EntitySystem *system);
@@ -50,6 +57,10 @@ class engine {
 	engine &operator=(engine &copy);
 
 	~engine(void);
+
+	/* Update */
+	void update(void);
+	void paused_actions(void);
 };
 
 #endif /* !ENGINE_H */
