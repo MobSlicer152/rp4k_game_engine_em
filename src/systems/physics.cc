@@ -151,29 +151,61 @@ void physics_system::push_entity(ECS::Entity *touching_ent,
 
 void physics_system::tick(ECS::World *world, float delta_time)
 {
-	if (!states::get_paused()) {
-		world->each<struct box_collider, struct sprite_2d,
-			    struct transform>(
-			[&](ECS::Entity *entity,
-			    ECS::ComponentHandle<struct box_collider> box,
-			    ECS::ComponentHandle<struct sprite_2d> sprite,
-			    ECS::ComponentHandle<struct transform> trans)
-				-> void {
-				box->update(
-					trans->x, trans->y,
-					sprite->self.getTextureRect().width,
-					sprite->self.getTextureRect().height);
-			});
+	if (states::get_paused())
+		return;
 
-		world->each<
-			struct box_collider, struct transform,
-			struct tag>([&](ECS::Entity *touching_entity,
-					ECS::ComponentHandle<struct box_collider>
-						touching_box,
-					ECS::ComponentHandle<struct transform>
-						trans1,
-					ECS::ComponentHandle<struct tag> tag1)
-					    -> void {
+	world->each<struct box_collider, struct sprite_2d, struct transform>(
+		[&](ECS::Entity *entity,
+		    ECS::ComponentHandle<struct box_collider> box,
+		    ECS::ComponentHandle<struct sprite_2d> sprite,
+		    ECS::ComponentHandle<struct transform> trans) -> void {
+			box->update(trans->x, trans->y,
+				    sprite->self.getTextureRect().width,
+				    sprite->self.getTextureRect().height);
+		});
+
+	world->each<struct box_collider, struct transform>(
+		[&](ECS::Entity *touching_entity,
+		    ECS::ComponentHandle<struct box_collider> box,
+		    ECS::ComponentHandle<struct transform> trans) -> void {
+			world->each<struct tilemap>(
+				[&](ECS::Entity *touched_entity,
+				    ECS::ComponentHandle<struct tilemap> map)
+					-> void {
+					size_t x;
+					size_t y;
+					size_t z;
+					
+					/* Loop through tilemap */
+					for (x = 0; x < map->map.size(); x++) {
+						for (y = 0; y < map->map[x].size(); y++) {
+							for (z = 0; z < map->map[x][y].size(); z++) {
+								if (!map->map[x][y][z])
+									return;
+
+								/* Avoid comparing an entity to itself */
+								if (touching_entity->getEntityId() == touched_entity->getEntityId())
+									return;
+
+								/* Check if this tile has collision */
+								if (map->map[x][y][z]->get_collision()) {
+									/* Initial collision check */
+									if (is_colliding(box, map->map[x][y][z]->area, trans->x_speed, trans->y_speed)) {
+										/* Final collision check */
+										check_collision_sides(trans, box, map->map[x][y][z]->area);
+									}
+								}
+							}
+						}
+					}
+				});
+		});
+
+	world->each<struct box_collider, struct transform, struct tag>(
+		[&](ECS::Entity *touching_entity,
+		    ECS::ComponentHandle<struct box_collider> touching_box,
+		    ECS::ComponentHandle<struct transform> trans1,
+		    ECS::ComponentHandle<struct tag> tag1) -> void {
 			world->each<struct box_collider, struct transform,
 				    struct tag>(
 				[&](ECS::Entity *touched_entity,
@@ -194,9 +226,9 @@ void physics_system::tick(ECS::World *world, float delta_time)
 				});
 		});
 
-		world->each<struct transform>(
-			[&](ECS::Entity *entity,
-			    ECS::ComponentHandle<struct transform> trans)
-				-> void { trans->move(); });
-	}
+	world->each<struct transform>(
+		[&](ECS::Entity *entity,
+		    ECS::ComponentHandle<struct transform> trans) -> void {
+			trans->move();
+		});
 }

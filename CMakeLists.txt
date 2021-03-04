@@ -20,6 +20,7 @@ set(ENGINE_SOURCES
 	src/systems/movement.cc
 	src/systems/physics.cc
 	src/systems/render.cc
+	src/systems/tilemap.cc
 )
 
 set(ENGINE_HEADERS
@@ -38,6 +39,7 @@ set(ENGINE_HEADERS
 	include/systems/movement.h
 	include/systems/physics.h
 	include/systems/render.h
+	include/systems/tilemap.h
 )
 
 set(BUILD_DYNAMIC_LIBS OFF)

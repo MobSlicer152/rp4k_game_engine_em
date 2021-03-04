@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
 
 	background->assign<struct transform>(0, 0);
 	background->assign<struct sprite_2d>("res/textures/background.png");
+	background->assign<struct tag>();
+	background->get<struct tag>()->add("Background");
+	background->assign<struct tilemap>();
 
 	test->assign<struct transform>(100, 10);
 	test->assign<struct sprite_2d>("res/textures/test_sheet.png");

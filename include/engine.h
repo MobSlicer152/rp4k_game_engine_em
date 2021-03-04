@@ -22,6 +22,7 @@
 #include "systems/input.h"
 #include "systems/movement.h"
 #include "systems/render.h"
+#include "systems/tilemap.h"
 
 class engine {
     public:

@@ -39,8 +39,41 @@ void render_system::tick(ECS::World *world, float delta)
 			engine::get_inst().win->draw(sprite->self);
 		});
 
-	/* Update */
-	engine::get_inst().win->display();
+	world->each<struct tilemap>(
+		     [&](ECS::Entity *,
+			 ECS::ComponentHandle<struct tilemap> map) -> void {
+				size_t x;
+				size_t y;
+				size_t z;
+				sf::RenderWindow *wnd;
+				
+				wnd = engine::get_inst().win;
+
+				/*
+				 * Loop through each tile and render onto the 
+				 *  engine's window instance. Note that this is
+				 *  looping through a vector which stores a
+				 *  vector which stores the tile
+				 */
+				for (x = 0; x < map->map.size(); x++) {
+					for (y = 0; y < map->map[x].size(); y++) {
+						for (z = 0; z < map->map[x][y].size(); z++) {
+							if (!map->map[x][y][z])
+								return;
+
+							wnd->draw(map->map[x][y][z]->area);
+							if (map->map[x][y][z]->get_collision()) {
+								map->collision_box.setPosition(map->map[x][y][z]->get_pos());
+								wnd->draw(map->collision_box);
+							} 
+						}
+					}
+				}
+		     });
+
+		/* Update */
+		engine::get_inst()
+			.win->display();
 }
 
 sf::Texture *render_system::load_texture(std::string texture_file)
