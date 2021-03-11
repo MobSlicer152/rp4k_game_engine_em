@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
 	inst.add_system(new input_system(win));
 	inst.add_system(new movement_system());
 	inst.add_system(new render_system());
+	inst.add_system(new tilemap_system());
 
 	/* Set up the entities */
 	background = inst.world->create();

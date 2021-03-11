@@ -2,14 +2,17 @@
 
 engine &engine::get_inst(void)
 {
-	static engine _inst;
-	return _inst;
+	static engine inst;
+	return inst;
 }
 
 void engine::start(sf::RenderWindow *win)
 {
 	this->running = true;
 	this->win = win;
+
+	this->main_cam = new main_camera();
+	this->pause = new pause_menu(this->win);
 
 	while (this->running)
 		this->update();
@@ -35,7 +38,7 @@ void engine::update(void)
 
 	this->world->tick(10.0f);
 
-	this->main_cam.update(world, 10.0f, this->win);
+	this->main_cam->update(world, 10.0f, this->win);
 
 	if (states::get_paused())
 		paused_actions();
@@ -51,5 +54,5 @@ engine::~engine(void)
 
 void engine::paused_actions(void)
 {
-	this->pause.render(this->win, 10.0f, main_cam.view.getCenter());
+	this->pause->render(this->win, 10.0f, main_cam->view.getCenter());
 }

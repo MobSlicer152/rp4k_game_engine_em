@@ -32,8 +32,8 @@ class engine {
 	/* Objects for the entity component system */
 	ECS::World *world;
 
-	main_camera main_cam;
-	pause_menu pause;
+	main_camera *main_cam;
+	pause_menu *pause;
 
 	/*
 	 * Because we prevent multiple instances by killing off the copy/move
