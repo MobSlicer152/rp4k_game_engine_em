@@ -80,7 +80,7 @@ void pause_menu::init_buttons(sf::RenderWindow *wnd)
 {
 	int i;
 
-	sf::Vector2f size(wnd->getSize().x, wnd->getSize().y);
+	sf::Vector2f size(wnd->getSize().x / 10, wnd->getSize().y / 25);
 
 	button_map::get_map().insert(
 		{ "RESUME",

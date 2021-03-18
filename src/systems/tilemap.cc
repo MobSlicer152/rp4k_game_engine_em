@@ -52,11 +52,13 @@ void tilemap_system::add_tile_on_click(bool has_collision,
 	 */
 	sf::RenderWindow *wnd;
 	sf::Vector2f mouse_pos;
+
+	wnd = engine::get_inst().win;
+	mouse_pos = wnd->mapPixelToCoords(sf::Mouse::getPosition(*wnd));
+
 	sf::Vector2i mouse_pos_grid(
 		static_cast<int>(mouse_pos.x / map->grid_size),
 		static_cast<int>(mouse_pos.y / map->grid_size));
 
-	wnd = engine::get_inst().win;
-	mouse_pos = wnd->mapPixelToCoords(sf::Mouse::getPosition(*wnd));
 	map->add_tile(mouse_pos_grid.x, mouse_pos_grid.y, 0, has_collision);
 }

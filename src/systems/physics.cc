@@ -18,11 +18,30 @@ bool physics_system::is_colliding(
 
 bool physics_system::is_colliding(
 	ECS::ComponentHandle<struct box_collider> touching_box,
-	sf::RectangleShape touched_rect, float x, float y)
+	sf::RectangleShape touched_rect)
 {
 	float touched_rect_left = touched_rect.getPosition().x;
 	float touched_rect_right =
 		touched_rect_left + touched_rect.getGlobalBounds().width;
+
+	float touched_rect_top = touched_rect.getPosition().y;
+	float touched_rect_bottom =
+		touched_rect_top + touched_rect.getGlobalBounds().height;
+
+	return (touching_box->right_edge > touched_rect_left &&
+		touched_rect_right > touching_box->left_edge &&
+		touching_box->bottom_edge > touched_rect_bottom &&
+		touched_rect_bottom > touching_box->top_edge);
+}
+
+bool physics_system::is_colliding(
+	ECS::ComponentHandle<struct box_collider> touching_box,
+	sf::RectangleShape touched_rect, float x, float y)
+{
+	float touched_rect_left =
+		touched_rect.getPosition().x + touched_rect.getPosition().x;
+	float touched_rect_right = touched_rect.getPosition().y +
+				   touched_rect.getGlobalBounds().width;
 
 	float touched_rect_top = touched_rect.getPosition().y;
 	float touched_rect_bottom =
@@ -151,7 +170,7 @@ void physics_system::push_entity(ECS::Entity *touching_ent,
 
 void physics_system::tick(ECS::World *world, float delta_time)
 {
-	if (states::get_paused()) {
+	if (!states::get_paused()) {
 		world->each<struct box_collider, struct sprite_2d,
 			    struct transform>(
 			[&](ECS::Entity *entity,
@@ -169,10 +188,24 @@ void physics_system::tick(ECS::World *world, float delta_time)
 			    struct transform>([&](ECS::Entity *touching_entity,
 						  ECS::ComponentHandle<
 							  struct box_collider>
-							  box,
+							  touching_box,
 						  ECS::ComponentHandle<
 							  struct transform>
 							  trans) -> void {
+			world->each<struct box_collider>(
+				[&](ECS::Entity *touched_entity,
+				    ECS::ComponentHandle<struct box_collider>
+					    touched_box) -> void {
+					if (touching_entity->getEntityId() ==
+					    touched_entity->getEntityId())
+						return;
+
+					if (is_colliding(touching_box,
+							 touched_box))
+						push_entity(touching_entity,
+							    touched_entity);
+				});
+
 			world->each<struct tilemap>([&](ECS::Entity
 								*touched_entity,
 							ECS::ComponentHandle<
@@ -182,6 +215,8 @@ void physics_system::tick(ECS::World *world, float delta_time)
 				size_t y;
 				size_t z;
 
+				trans->colliding = false;
+
 				/* Loop through tilemap */
 				for (x = 0; x < map->map.size(); x++) {
 					for (y = 0; y < map->map[x].size();
@@ -189,34 +224,36 @@ void physics_system::tick(ECS::World *world, float delta_time)
 						for (z = 0;
 						     z < map->map[x][y].size();
 						     z++) {
-							if (!map->map[x][y][z])
-								return;
-
-							/* Avoid comparing an entity to itself */
-							if (touching_entity
-								    ->getEntityId() ==
-							    touched_entity
-								    ->getEntityId())
-								return;
-
-							/* Check if this tile has collision */
-							if (map->map[x][y][z]
-								    ->get_collision()) {
-								/* Initial collision check */
-								if (is_colliding(
-									    box,
-									    map->map[x][y][z]
-										    ->area,
-									    trans->x_speed,
-									    trans->y_speed)) {
-									/* Final collision check */
-									check_collision_sides(
-										trans,
-										box,
-										map->map[x][y][z]
-											->area);
+							if (map->map[x][y][z] !=
+								    nullptr &&
+							    map->map[x][y][z]
+								    ->colliding) {
+								/* Avoid comparing an entity to itself */
+								if (touching_entity
+									    ->getEntityId() !=
+								    touched_entity
+									    ->getEntityId()) {
+									/* Check if this tile has collision */
+									if (map->map[x][y][z]
+										    ->get_collision()) {
+										/* Initial collision check */
+										if (is_colliding(
+											    touching_box,
+											    map->map[x][y][z]
+												    ->area,
+											    trans->x_speed,
+											    trans->y_speed)) {
+											/* Final collision check */
+											trans->colliding =
+												true;
+											printf("something occured\n");
+										}
+									}
 								}
 							}
+
+							printf("%zu %zu %zu\n",
+							       x, y, z);
 						}
 					}
 				}

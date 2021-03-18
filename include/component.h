@@ -75,10 +75,13 @@ struct transform {
 	float x_speed;
 	float y_speed;
 
+	bool colliding;
+
 	transform(float x, float y)
 	{
 		this->x = x;
 		this->y = y;
+		this->colliding = false;
 	}
 
 	void update_speed(float x_speed, float y_speed)
@@ -89,8 +92,10 @@ struct transform {
 
 	void move(void)
 	{
-		this->x += this->x_speed;
-		this->y += this->y_speed;
+		if (!this->colliding) {
+			this->x += this->x_speed;
+			this->y += this->y_speed;
+		}
 	}
 };
 ECS_DEFINE_TYPE(transform);
@@ -223,7 +228,7 @@ struct tilemap {
 			return;
 
 		if (this->map[x][y][z] == nullptr) {
-			this->map[x][y][z] = new struct tile(
+			this->map[x][y][z] = new tile(
 				x, y, this->grid_size, has_collision);
 			printf("Added tile\n");
 		}
@@ -259,7 +264,9 @@ struct tilemap {
 		/* Open the file */
 		fp = fopen(path.c_str(), "wb");
 		if (!fp) {
-			fprintf(stderr, "Error: failed to open file \'%s\': %s\n", path.c_str(), strerror(errno));
+			fprintf(stderr,
+				"Error: failed to open file \'%s\': %s\n",
+				path.c_str(), strerror(errno));
 			return;
 		}
 
@@ -374,9 +381,13 @@ struct tilemap {
 		this->grid_size = atof(
 			&buf[(sizeof(uint32_t) * 2) +
 			     2]); /* This is after the second float and the newline */
-		this->layers = atoi(&buf[(sizeof(uint32_t) * 2) +
-					 sizeof(float) + 3]); /* And the last float */
-		colliding = (buf[(sizeof(uint32_t) * 2) + (sizeof(float) * 2) + 3]) ? true : false;
+		this->layers =
+			atoi(&buf[(sizeof(uint32_t) * 2) + sizeof(float) +
+				  3]); /* And the last float */
+		colliding =
+			(buf[(sizeof(uint32_t) * 2) + (sizeof(float) * 2) + 3]) ?
+				      true :
+				      false;
 
 		/* Now that we have our information, free buf */
 		free(buf);
@@ -385,19 +396,24 @@ struct tilemap {
 		this->clear();
 
 		/* Resize the map's x axis */
-		this->map.resize(this->max_size.x, std::vector<std::vector<tile *>>());
+		this->map.resize(this->max_size.x,
+				 std::vector<std::vector<tile *>>());
 		for (x = 0; x < this->max_size.x; x++) {
 			for (y = 0; y < this->max_size.y; y++) {
 				/* Resize the y axis */
-				this->map[x].resize(this->max_size.y, std::vector<tile *>());
+				this->map[x].resize(this->max_size.y,
+						    std::vector<tile *>());
 
 				for (z = 0; z < this->layers; z++)
 					/* And the z axis */
-					this->map[x][y].resize(this->layers, NULL);
+					this->map[x][y].resize(this->layers,
+							       NULL);
 			}
 		}
 
-		this->map[this->max_size.x][this->max_size.y][this->layers] = new tile(this->max_size.x, this->max_size.y, this->grid_size, colliding);
+		this->map[this->max_size.x][this->max_size.y][this->layers] =
+			new tile(this->max_size.x, this->max_size.y,
+				 this->grid_size, colliding);
 	}
 
 	~tilemap(void)

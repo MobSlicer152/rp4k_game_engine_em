@@ -45,7 +45,7 @@ void button::highlight(sf::RenderWindow *wnd)
 
 void button::update(sf::Event event, float delta)
 {
-
+	this->check_pressed(event);
 }
 
 void button::render(sf::RenderWindow *wnd, float delta)

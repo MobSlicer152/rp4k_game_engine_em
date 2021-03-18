@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
 	test->assign<struct animator>(32, 32, 200.0f, 4, 1);
 	test->get<struct animator>()->current_row = 0; /* idle animation */
 	test->assign<struct input_controller>();
+	test->assign<struct box_collider>();
+	test->assign<main_camera>(sf::Vector2f(win->getSize().x / 2, win->getSize().y / 2));
 
 	/* Print our entity IDs */
 	printf("Entity ID of entity \'background\' is %zu\n",

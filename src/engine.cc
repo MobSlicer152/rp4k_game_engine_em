@@ -11,7 +11,8 @@ void engine::start(sf::RenderWindow *win)
 	this->running = true;
 	this->win = win;
 
-	this->main_cam = new main_camera();
+	this->main_cam = new main_camera(sf::Vector2f(
+		this->win->getSize().x / 2, this->win->getSize().y / 2));
 	this->pause = new pause_menu(this->win);
 
 	while (this->running)
@@ -34,6 +35,8 @@ void engine::update(void)
 	while (this->win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			this->win->close();
+
+		this->pause->update(event, 10.0f, this->win);
 	}
 
 	this->world->tick(10.0f);

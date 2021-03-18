@@ -20,6 +20,10 @@ class physics_system : public ECS::EntitySystem {
 
 	bool
 	is_colliding(ECS::ComponentHandle<struct box_collider> touching_box,
+		     sf::RectangleShape touched_rect);
+
+	bool
+	is_colliding(ECS::ComponentHandle<struct box_collider> touching_box,
 		     sf::RectangleShape touched_rect, float x, float y);
 
 	bool
